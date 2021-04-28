@@ -19,8 +19,6 @@ const clients = {};
 // I'm maintaining all active users in this object
 const users = {};
 
-
-
 const sendMessage = (json) => {
   // We are sending the current data to all connected clients
   Object.keys(clients).map((client) => {
