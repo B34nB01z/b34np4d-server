@@ -3,22 +3,23 @@ const db = new sqlite3.Database('bean.db');
 
 db.serialize(() => {
   try {
+    console.info('Creating tables...')
     db.run(`
   CREATE TABLE ctfs (
     id    INTEGER PRIMARY KEY AUTOINCREMENT,
     name  VARCHAR(64) UNIQUE,
-    from  DATETIME,
-    to    DATETIME,
+    start  DATETIME,
+    end    DATETIME,
     url   TEXT
   );
-    `);
+    `, () => {/* table exists*/});
 
     db.run(`
   CREATE TABLE categories (
     id    INTEGER PRIMARY KEY AUTOINCREMENT,
     name  VARCHAR(64) UNIQUE
   );
-    `);
+    `, () => {/* table exists*/});
 
     db.run(`
   CREATE TABLE chals (
@@ -31,8 +32,8 @@ db.serialize(() => {
     FOREIGN KEY (ctf) REFERENCES ctfs (id),
     FOREIGN KEY (category) REFERENCES categories (id)
   );
-    `);
-  } catch (e) {}
+    `, () => {/* table exists*/});
+  } catch (e) {console.log(e)}
 });
 
 export default db;
