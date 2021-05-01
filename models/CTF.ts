@@ -23,7 +23,7 @@ export class CTF {
           db.prepare('SELECT * FROM ctfs WHERE id = ?')
             .get([this.lastID,], (err, row) => {
               if (err) return reject(err);
-              resolve(new CTF(row.id, row.name, row.start, row.end, row.url));
+              resolve(new CTF(row.id, row.name, new Date(row.start), new Date(row.end), row.url));
             }).finalize();
         }).finalize();
     });
@@ -67,7 +67,7 @@ export class CTF {
         .get([id], (err, row) => {
           if(err) return reject(err);
           if(!row) return reject({status: 400, message: 'Invalid ID'});
-          resolve(new CTF(row.id, row.name, row.start, row.end, row.url));
+          resolve(new CTF(row.id, row.name, new Date(row.start), new Date(row.end), row.url));
         })
     });
   }
@@ -79,7 +79,7 @@ export class CTF {
           if(err) return reject(err);
           const ctfs: CTF[] = [];
           for(const row of rows) {
-            ctfs.push(new CTF(row.id, row.name, row.start, row.end, row.url));
+            ctfs.push(new CTF(row.id, row.name, new Date(row.start), new Date(row.end), row.url));
           }
           resolve(ctfs);
         })
