@@ -124,3 +124,15 @@ app.get('/ctfs', (req, res) => {
       res.send(err);
     })
 });
+
+app.get('/chals', (req, res) => {
+  const ctfId = parseInt(req.query.ctf.toString(), 10);
+  Challenge.getAll(ctfId)
+    .then(chals => {
+      res.send(chals);
+    })
+    .catch(err => {
+      res.statusCode = 500;
+      res.send(err);
+    })
+})

@@ -51,10 +51,10 @@ export class Challenge {
     });
   }
 
-  public static getAll(): Promise<Challenge[]> {
+  public static getAll(ctfId: number): Promise<Challenge[]> {
     return new Promise((resolve, reject) => {
-      db.prepare('SELECT * FROM chals')
-        .all([], (err, rows) => {
+      db.prepare('SELECT * FROM chals WHERE ctf = ?')
+        .all([ctfId], (err, rows) => {
           if(err) return reject(err);
           const chals: Challenge[] = [];
           for(const row of rows) {
