@@ -125,11 +125,59 @@ app.get('/ctfs', (req, res) => {
     })
 });
 
+app.route('/chal')
+  .get((req, res) => {
+
+  })
+  .post((req, res) => {
+    Challenge.create(req.body.ctf, req.body.name, req.body.category, req.body.points, req.body.done).then(_ => res.send(true)).catch(_ => res.send(false));
+  })
+  .put((req, res) => {
+
+  })
+  .delete((req, res) => {
+
+  });
+
 app.get('/chals', (req, res) => {
+  if(!req.query.ctf)
+    return res.status(500).send({message: 'no ctf Id provided'})
   const ctfId = parseInt(req.query.ctf.toString(), 10);
   Challenge.getAll(ctfId)
     .then(chals => {
       res.send(chals);
+    })
+    .catch(err => {
+      res.statusCode = 500;
+      res.send(err);
+    })
+})
+
+app.route('/cat')
+  .get((req, res) => {
+
+  })
+  .post((req, res) => {
+    Category.create(req.body.name)
+      .then((cat: Category) => {
+        res.send(cat);
+      });
+  })
+  .put((req, res) => {
+
+  })
+  .delete((req, res) => {
+
+  });
+
+app.get('/cats', (req, res) => {
+  if(!req.query.ctf)
+    return res.status(500).send({message: 'no ctf Id provided'})
+  const ctfId = parseInt(req.query.ctf.toString(), 10);
+
+  Category.getAll(ctfId)
+    .then(cats => {
+      res.send(cats);
     })
     .catch(err => {
       res.statusCode = 500;

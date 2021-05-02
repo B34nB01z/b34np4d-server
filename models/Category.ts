@@ -43,9 +43,11 @@ export class Category {
     });
   }
 
-  public static getAll(): Promise<Category[]> {
+  public static getAll(ctfId: number): Promise<Category[]> {
     return new Promise((resolve, reject) => {
-      db.prepare('SELECT * FROM categories')
+      db.prepare(`SELECT DISTINCT categories.id as id, categories.name as name FROM categories 
+                           INNER JOIN chals ON categories.id=chals.category 
+                           INNER JOIN ctfs ON chals.ctf=ctfs.id`)
         .all([], (err, rows) => {
           if(err) return reject(err);
           const cats: Category[] = [];

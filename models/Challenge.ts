@@ -19,7 +19,7 @@ export class Challenge {
 
   public static create(ctf: number, name: string, category: number, points: number, done: boolean): Promise<Challenge> {
     return new Promise((resolve, reject) => {
-      db.prepare('INSERT INTO chals (ctf, name, category, points, done) VALUES (?)')
+      db.prepare('INSERT INTO chals (ctf, name, category, points, done) VALUES (?, ?, ?, ?, ?)')
         .run([ctf, name, category, points, done], function(err) {
           if(err) return reject(err);
           db.prepare('SELECT * FROM chals WHERE id = ?')
@@ -58,7 +58,7 @@ export class Challenge {
           if(err) return reject(err);
           const chals: Challenge[] = [];
           for(const row of rows) {
-            chals.push(new Challenge(row.id, row.ctf, row.name, row.category, row.points, row.done));
+            chals.push(new Challenge(row.id, row.ctf, row.name, row.category, row.points, row.done==1?true:false));
           }
           resolve(chals);
         })
