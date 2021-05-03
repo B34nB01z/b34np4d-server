@@ -33,6 +33,27 @@ export class Category {
     });
   }
 
+  public delete(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      db.prepare('DELETE FROM categories WHERE id = ?')
+        .run([this.id], (err) => {
+          if(err) return reject(err);
+          resolve();
+        }).finalize();
+    });
+  }
+  
+  public static delete(id: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+      db.prepare('DELETE FROM categories WHERE id = ?')
+        .run([id], function(err) {
+          if(err) return reject(err);
+          if(!this.changes) return reject({status: 400, message: 'Invalid ID'});
+          resolve();
+        }).finalize();
+    });
+  }
+
   public static get(id: number): Promise<Category> {
     return new Promise((resolve, reject) => {
       db.prepare('SELECT * FROM categories WHERE id = ?')

@@ -41,6 +41,27 @@ export class Challenge {
     });
   }
 
+  public delete(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      db.prepare('DELETE FROM chals WHERE id = ?')
+        .run([this.id], (err) => {
+          if(err) return reject(err);
+          resolve();
+        }).finalize();
+    });
+  }
+
+  public static delete(id: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+      db.prepare('DELETE FROM chals WHERE id = ?')
+        .run([id], function(err) {
+          if(err) return reject(err);
+          if(!this.changes) return reject({status: 400, message: 'Invalid ID'});
+          resolve();
+        }).finalize();
+    });
+  }
+
   public static get(id: number): Promise<Challenge> {
     return new Promise((resolve, reject) => {
       db.prepare('SELECT * FROM chals WHERE id = ?')

@@ -100,18 +100,27 @@ app.route('/ctf')
       .then(ctf => {
         res.send(ctf);
       })
-      .catch(err => res.send(err));
+      .catch(err => {
+      res.statusCode = 500;
+      res.send(err);
+    });
   })
   .post((req, res) => {
     CTF.create(req.body.name, req.body.start, req.body.end, req.body.url).then(_ => res.send(true)).catch(_ => res.send(false));
   })
   .put((req, res) => {
     const ctf: CTF = Object.setPrototypeOf(req.body, CTF.prototype);
-    ctf.update().then(_ => res.send(true)).catch(err => res.send(err));
+    ctf.update().then(_ => res.send(true)).catch(err => {
+      res.statusCode = 500;
+      res.send(err);
+    });
   })
   .delete((req, res) => {
     const id = parseInt(req.query.id.toString(), 10);
-    CTF.delete(id).then(_ => res.send(true)).catch(err => res.send(err));
+    CTF.delete(id).then(_ => res.send(true)).catch(err => {
+      res.statusCode = 500;
+      res.send(err);
+    });
   });
 
 app.get('/ctfs', (req, res) => {
@@ -127,16 +136,32 @@ app.get('/ctfs', (req, res) => {
 
 app.route('/chal')
   .get((req, res) => {
-
+    const id = parseInt(req.query.id.toString(), 10);
+    Challenge.get(id)
+      .then(chal => {
+        res.send(chal);
+      })
+      .catch(err => {
+      res.statusCode = 500;
+      res.send(err);
+    });
   })
   .post((req, res) => {
     Challenge.create(req.body.ctf, req.body.name, req.body.category, req.body.points, req.body.done).then(_ => res.send(true)).catch(_ => res.send(false));
   })
   .put((req, res) => {
-
+    const chal: Challenge = Object.setPrototypeOf(req.body, Challenge.prototype);
+    chal.update().then(_ => res.send(true)).catch(err => {
+      res.statusCode = 500;
+      res.send(err);
+    });
   })
   .delete((req, res) => {
-
+    const id = parseInt(req.query.id.toString(), 10);
+    Challenge.delete(id).then(_ => res.send(true)).catch(err => {
+      res.statusCode = 500;
+      res.send(err);
+    });
   });
 
 app.get('/chals', (req, res) => {
@@ -155,7 +180,15 @@ app.get('/chals', (req, res) => {
 
 app.route('/cat')
   .get((req, res) => {
-
+    const id = parseInt(req.query.id.toString(), 10);
+    Category.get(id)
+      .then(cat => {
+        res.send(cat);
+      })
+      .catch(err => {
+      res.statusCode = 500;
+      res.send(err);
+    });
   })
   .post((req, res) => {
     Category.create(req.body.name)
@@ -164,10 +197,18 @@ app.route('/cat')
       });
   })
   .put((req, res) => {
-
+    const cat: Category = Object.setPrototypeOf(req.body, Category.prototype);
+    cat.update().then(_ => res.send(true)).catch(err => {
+      res.statusCode = 500;
+      res.send(err);
+    });
   })
   .delete((req, res) => {
-
+    const id = parseInt(req.query.id.toString(), 10);
+    Category.delete(id).then(_ => res.send(true)).catch(err => {
+      res.statusCode = 500;
+      res.send(err);
+    });
   });
 
 app.get('/cats', (req, res) => {
